@@ -1,0 +1,183 @@
+:root {
+    --iconSize: 50px;
+}
+
+body {
+    background: #1E1E1E;
+    display: flex;
+    justify-content: center;
+}
+
+/* -- Components -- */
+
+
+.top {
+    position: absolute;
+    width: 100%;
+    height: 120px;
+    left: 0px;
+    top: 0px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0px 42px;
+
+    /* align-content: space-between; */
+
+    background: #4E6E5D;
+}
+
+.menu {
+    width: calc(var(--iconSize) * 1.32);
+    height: calc(var(--iconSize) * 1.32);
+}
+
+.account {
+    width: var(--iconSize);
+    height: var(--iconSize);
+}
+
+.attempt_wrapper {
+    box-sizing: border-box;
+
+    /* position: absolute; */
+    width: 1224px;
+    height: 350px;
+    /* left: 278px; */
+    /* top: 226px; */
+
+    margin-top: 150px;
+
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;     */
+    align-items: center;
+
+    padding: 0;
+
+    /* border: 3px solid #FFFFFF; */
+}
+
+.attempt {
+    box-sizing: border-box;
+
+
+    /* position: absolute; */
+    width: 800px;
+    height: 45px;
+
+    margin: 10px 0px;
+
+    /* left: 278px;
+    top: 226px; */
+
+    border: 3px solid #FFFFFF;
+}
+
+.time {
+    border: 3px solid white;
+    height: 54px;
+}
+
+.timeFill {
+    border: 2px solid red;
+    background-color: #FFFFFF;
+    height: 54px;
+    margin-top: -53px;
+    margin-left: 89px;
+}
+
+.time_wrapper {
+    box-sizing: border-box;
+    
+    justify-content: center;
+    
+    display: flex;
+    /* position: absolute;
+    left: 108px;
+    top: 728px; */
+    width: 1050px;
+    height: 54px;
+
+    margin: 40px auto 0;
+
+    /* margin-top: 40px; */
+
+    border: 2px solid red;
+}
+
+
+.triangle_play_button {
+    /* position: absolute; */
+    /* left: 681.12px;
+    top: 889.6px; */
+
+    width: 0; 
+    height: 0; 
+    border-top: 30px solid transparent;
+    border-bottom: 30px solid transparent;
+    
+    border-left: 30px solid #FFFFFF;
+
+    margin: 40px auto -100px;
+}
+
+.circle_play_button {
+    /* position: absolute; */
+    width: 100px;
+    height: 100px;
+    margin: 20px auto;
+    /* left: 649px;
+    top: 828px; */
+
+    position: relative;
+    z-index: -1;
+
+    border-radius: 200px;
+
+    background: #4DA167;
+}
+
+/* End components */
+
+/* -- Texts -- */
+
+.heardle {
+    /* position: absolute;
+    left: 602px;
+    top: 37px; */
+    /* width: 236px;
+    height: 77px; */
+
+
+    font-family: 'Helvetica';
+    font-style: normal;
+    font-size: 52px;
+    line-height: 77px;
+
+    color: #FFFFFF;
+}
+
+.attempt_text {
+    /* position: absolute; */
+    width: 884px;
+    height: 54px;
+    left: 339px;
+    top: 239px;
+
+    padding-left: 14px;
+    padding-top: 5px;
+
+    font-family: 'Helvetica';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 29px;
+    /* identical to box height */
+
+
+    color: #FFFFFF;
+}
