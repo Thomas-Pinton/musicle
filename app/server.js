@@ -82,18 +82,15 @@ const getSong = async () => {
     });
   }
   let data = await readFileAsync('song.json');
+  data ? data = JSON.parse(data) : data = [];
 
-  console.log ("Data ", data);
-
-  if (!data)
+  if (!data[0])
   {
     console.log("No data saved");
   } else 
   {
-    data = JSON.parse(data);
     console.log("Song already saved");
-    console.log(data.src);
-    return data;
+    return (data[0]);
   }
 
   const browser = await puppeteer.launch();
@@ -116,7 +113,7 @@ const getSong = async () => {
     src: src,
   };
 
-  const jsonData = JSON.stringify(song, null, 2);
+  const jsonData = JSON.stringify([song], null, 2);
 
   fs.writeFile('song.json', jsonData, (err) => {
     if (err) throw err;

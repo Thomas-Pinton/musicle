@@ -21,14 +21,17 @@ let wikipediaMusic = 'https://upload.wikimedia.org/wikipedia/pt/8/8e/I_want_you.
 
 
 const getSong = async () => {
-  try {
-    const response = await axios.get('http://localhost:4000/')
-    var rand = Math.floor(Math.random() * response.data.length)
-    console.log(response.data[rand])
-    return response.data[rand];
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
+  return new Promise ( async (resolve) => {
+    try {
+      const response = await axios.get('http://localhost:4000/')
+      console.log(response.data)
+      resolve (response.data);
+      return;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      resolve();
+    }
+  })
 }
 
 function Attempt ({ text })
@@ -55,17 +58,39 @@ export default function App ()
     src: wikipediaMusic,
   })
   const [dataFetched, setDataFetched] = useState(false);
+  const [playing, setPlaying] = useState(false);
+  const [timeBar, setTimeBar] = useState(0);
 
   useEffect(() => {
     console.log(song.src)
     console.log("Using effect!")
     getSong().then( (dataFromGetSong) => {
-      console.log(dataFromGetSong)
+      console.log("Data from get song", dataFromGetSong)
       setSong({name: dataFromGetSong.name, src: dataFromGetSong.src})
       setDataFetched(true);
+      // setAudio(dataFromGetSong.src)
     })
-    console.log(song.src)
   }, []);
+
+  useEffect( () => {
+    if (timeBar < 70 && playing)
+    {
+      setTimeout(() => setTimeBar(prev => prev += 1), 43);
+      console.log("valor", timeBar)
+    }
+    if (timeBar == 70)
+    {
+      setPlaying(false);
+    }
+  }, [timeBar, playing])
+
+  const handleClick = () => {
+    if(!playing)
+    {
+      setTimeBar(0);
+    }
+    setPlaying(!playing);
+  }
 
   return (
     <div>
@@ -99,12 +124,13 @@ export default function App ()
             <Time w={280}/>
             <Time w={560}/>
           </div>
-          <div className='timeFill' style={{width:"140px"}}>
+          <div className='timeFill' style={{width: timeBar}}>
 
           </div>
 
           <div className='play_wrapper'>
-            <Player url={song.src}>
+            {console.log("page.js", song.src, dataFetched)}
+            <Player url={song.src} onClickPlay={handleClick}>
             </Player>
           </div>
         </>

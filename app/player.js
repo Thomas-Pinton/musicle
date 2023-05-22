@@ -3,15 +3,16 @@
 import React, { useState, useEffect } from "react";
 
 const useAudio = url => {
+  console.log("Url 2 ", url)
   const [audio, setAudio] = useState(new Audio(url));
   const [playing, setPlaying] = useState(false);
 
   const toggle = () => {
     if (!playing)
     {
-      setPlaying(true);
       audio.currentTime = 0;
     }
+    setPlaying(!playing);
   }
   useEffect(() => {
       playing ? audio.play() : audio.pause();
@@ -41,12 +42,14 @@ const useAudio = url => {
   return [playing, toggle];
 };
 
-const Player = ({ url }) => {
+const Player = ({ url, onClickPlay }) => {
+
+  console.log("Url player", url)
   const [playing, toggle] = useAudio(url);
 
   return (
     <div>
-      <button onClick={toggle}>{playing ? "Pause" : "Play"}</button>
+      <button onClick={() => {toggle(), onClickPlay()}}>{playing ? "Pause" : "Play"}</button>
     </div>
   );
 };
