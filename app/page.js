@@ -3,13 +3,13 @@
 import './styles.css';
 
 import Player from './player.js'
-
+import SearchBox from './searchBox.js'
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+
+import React, {useEffect, useState, useRef} from 'react';
 //import menu from './images/menu.png'
 import menu from 'C:/Users/thoma/OneDrive/Documentos/Codes/HeardleClone/heardle_clone/app/images/menu.png'
 import account from './images/account.png'
-//import getSong from './getSong.js'
 
 let menuUrl = 'https://cdn-icons-png.flaticon.com/512/7216/7216128.png';
 let accountUrl = 'https://cdn-icons-png.flaticon.com/512/61/61205.png';
@@ -17,8 +17,6 @@ let accountUrl = 'https://cdn-icons-png.flaticon.com/512/61/61205.png';
 let musica1 = 'https://file.notion.so/f/s/ceb26cb9-9dcd-4f09-b34d-337fdf833c00/Counting_Stars.mp3?id=1186b948-bf25-4438-8b8e-552fb0d660ca&table=block&spaceId=09cc515c-e3ac-4443-8f45-cc119ad130bd&expirationTimestamp=1683514648561&signature=rdohdrs_ihND7xJaF9athkAe6OQHZ5qkyu5z08JM0kA';
 
 let wikipediaMusic = 'https://upload.wikimedia.org/wikipedia/pt/8/8e/I_want_you.ogg';
-
-
 
 const getSong = async () => {
   return new Promise ( async (resolve) => {
@@ -34,8 +32,26 @@ const getSong = async () => {
   })
 }
 
+const getSongs = async () => {
+  return new Promise ( async (resolve) => {
+    try {
+      const response = await axios.get('http://localhost:4000/allSongs');
+      console.log(response.data[0]);
+      console.log(response.data[3]);
+      resolve (response.data);
+      return;
+    } catch (error) {
+      console.log("Error: ", error);
+      resolve();
+    }
+  })
+}
+
 function Attempt ({ text })
 {
+  const changeText = (newText) => {
+    text = newText;
+  }
   return (
     <div className='attempt'>
       <p className='attempt_text'>❌{text}</p>
@@ -57,9 +73,16 @@ export default function App ()
     name: 'Teste',
     src: wikipediaMusic,
   })
+
+  const [data, setData] = useState([])
+  // let data = []
+
   const [dataFetched, setDataFetched] = useState(false);
+  const [songsFetched, setSongsFetched] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [timeBar, setTimeBar] = useState(0);
+
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     console.log(song.src)
@@ -69,6 +92,12 @@ export default function App ()
       setSong({name: dataFromGetSong.name, src: dataFromGetSong.src})
       setDataFetched(true);
       // setAudio(dataFromGetSong.src)
+    })
+    getSongs().then( (response) => {
+      // const songs = response.map((song, index) => ({ key: index.toString(), value: song }));
+      setData(response)
+      console.log("Data (tem que vir antes)", data)
+      setSongsFetched(true);
     })
   }, []);
 
@@ -92,9 +121,21 @@ export default function App ()
     setPlaying(!playing);
   }
 
+  function handleSearch() {
+    console.log("Handling search")
+    attempt1.current.text = 'red';
+    attempt1.current.changeText("Teste");
+  }
+
+  const attempt1 = useRef(null);
+  const attempt2 = useRef(null);
+  const attempt3 = useRef(null);
+  const attempt4 = useRef(null);
+  const attempt5 = useRef(null);
+
   return (
     <div>
-      {dataFetched && (
+      {dataFetched && songsFetched && (
         <>
           <div className='top'>
             <img
@@ -111,9 +152,9 @@ export default function App ()
           </div>
           
           <div className='attempt_wrapper'>
-            <Attempt text={'Enter Sandman - Metallica'}/>
-            <Attempt text={'Memories - Maroon 5'}/>
-            <Attempt text={'This Love - Maroon 5'}/>
+            <Attempt ref={attempt1} />
+            <Attempt ref={attempt2} />
+            <Attempt ref={attempt3} />
             <Attempt />
             <Attempt />
           </div> 
@@ -133,6 +174,10 @@ export default function App ()
             <Player url={song.src} onClickPlay={handleClick}>
             </Player>
           </div>
+          {console.log("data (tem que vir depois)", data)}
+          <SearchBox data={data} onClickSearch={handleSearch}>
+
+          </SearchBox>
         </>
       )}
     </div>

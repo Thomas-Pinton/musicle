@@ -13,6 +13,11 @@ app.get('/', async (req, res) => {
     res.send(song);
 })
 
+app.get('/allSongs', async (req, res) => {
+  const songs = await getAllSongs();
+  res.send(songs);
+})
+
 app.listen(4000, () => {
   console.log('Server listening on port 4000')
 });
@@ -24,12 +29,15 @@ const getAllSongs = async () => {
   let names = []
 
   fs.readdirSync(filePath).forEach(file => {
-    mm.parseFile(file).then(metadata => {
-      names.push(`${metadata.common.title} - ${metad.common.artist}`);
-    }).catch(err => {
-      console.error(err.message);
-    });
+    names.push(file)
+  //  mm.parseFile(file).then(metadata => {
+  //     names.push(`${metadata.common.title} - ${metad.common.artist}`);
+  //   }).catch(err => {
+  //     console.error(err.message);
+  //   });
   });
+
+  return names;
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -69,6 +77,8 @@ const getAllSongs = async () => {
   });
 
   await browser.close();
+
+  return songs;
 }
 
 const getSong = async () => {
