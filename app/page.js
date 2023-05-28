@@ -54,7 +54,7 @@ function Attempt ({ text })
   }
   return (
     <div className='attempt'>
-      <p className='attempt_text'>❌{text}</p>
+      <p className='attempt_text'>{text}</p>
     </div>
   )
 }
@@ -70,7 +70,7 @@ function Time ({ w })
 export default function App ()
 {
   const [song, setSong] = useState({
-    name: 'Teste',
+    id: 'Teste',
     src: wikipediaMusic,
   })
 
@@ -89,7 +89,7 @@ export default function App ()
     console.log("Using effect!")
     getSong().then( (dataFromGetSong) => {
       console.log("Data from get song", dataFromGetSong)
-      setSong({name: dataFromGetSong.name, src: dataFromGetSong.src})
+      setSong({id: dataFromGetSong.id, src: dataFromGetSong.src})
       setDataFetched(true);
       // setAudio(dataFromGetSong.src)
     })
@@ -121,17 +121,26 @@ export default function App ()
     setPlaying(!playing);
   }
 
-  function handleSearch() {
-    console.log("Handling search")
-    attempt1.current.text = 'red';
-    attempt1.current.changeText("Teste");
-  }
+  const [texts, setTexts] = useState([]);
 
-  const attempt1 = useRef(null);
-  const attempt2 = useRef(null);
-  const attempt3 = useRef(null);
-  const attempt4 = useRef(null);
-  const attempt5 = useRef(null);
+  function handleSearch(songAttempt) {
+    if (attempt > 4)
+      return;
+
+    console.log("Data song ida", song.id)
+    console.log("Data song id", data[song.id])
+    console.log("Handling search")
+
+    const updatedItems = [...texts];
+
+    if (data[song.id] != songAttempt)
+      updatedItems[attempt] = "❌ " + songAttempt;
+    else
+      updatedItems[attempt] = "✅ " + songAttempt;
+
+    setTexts(updatedItems);
+    setAttempt(prev => prev += 1);
+  }
 
   return (
     <div>
@@ -152,11 +161,11 @@ export default function App ()
           </div>
           
           <div className='attempt_wrapper'>
-            <Attempt ref={attempt1} />
-            <Attempt ref={attempt2} />
-            <Attempt ref={attempt3} />
-            <Attempt />
-            <Attempt />
+            <Attempt text={texts[0]} />
+            <Attempt text={texts[1]} />
+            <Attempt text={texts[2]} />
+            <Attempt text={texts[3]} />
+            <Attempt text={texts[4]} />
           </div> 
 
           <div className='time_wrapper'>

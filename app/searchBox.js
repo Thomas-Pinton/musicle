@@ -16,7 +16,7 @@ const SearchBox = ({ data, onClickSearch }) => {
         <div className="searchContainer">
             {/* <div className='InputArea'> */}
                 <input className="searchInput" type='text' placeholder={searchInput} value={searchInput} onChange={onChange} />
-                <button className="searchButton" onClick={onClickSearch}>
+                <button className="searchButton" onClick={() => { onClickSearch(searchInput)}}>
                     Search
                 </button>
             {/* </div> */}

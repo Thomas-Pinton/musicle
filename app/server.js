@@ -119,9 +119,11 @@ const getSong = async () => {
   const src = await audios[randomNumber].evaluate(node => node.src);
 
   const song = {
-    name: 'Teste',
+    id: randomNumber,
     src: src,
   };
+
+  console.log(song)
 
   const jsonData = JSON.stringify([song], null, 2);
 
@@ -129,8 +131,6 @@ const getSong = async () => {
     if (err) throw err;
     console.log('Data written to file');
   });
-
-  console.log(randomNumber, src);
 
   await browser.close();
 
