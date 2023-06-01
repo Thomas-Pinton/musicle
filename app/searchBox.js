@@ -14,22 +14,41 @@ const SearchBox = ({ data, onClickSearch }) => {
 
     return (
         <div className="searchContainer">
-            {/* <div className='InputArea'> */}
+            <div className='inputArea'>
                 <input className="searchInput" type='text' placeholder={searchInput} value={searchInput} onChange={onChange} />
                 <button className="searchButton" onClick={() => { onClickSearch(searchInput)}}>
                     Search
                 </button>
-            {/* </div> */}
+            </div>
             
             <div className="dropdownSuggestions">
                 {
-                    data.filter( item => {
-                        item = item.toLowerCase();
-                        console.log(item)
-                        return (searchInput && item.startsWith(searchInput.toLowerCase()))
+                    data
+                        .filter( item => {
+                            if (!searchInput) return 0;
+                            console.log(item)
+                            if (item.title.toLowerCase().startsWith(searchInput.toLowerCase()))
+                            {
+                                item.priority = 3;
+                                return true;
+                            } 
+                            if (item.artist.toLowerCase().startsWith(searchInput.toLowerCase()))
+                            {
+                                item.priority = 2;
+                                return true;
+                            }
+                            if (item.album.toLowerCase().startsWith(searchInput.toLowerCase()))
+                            {
+                                item.priority = 1;
+                                return true;
+                            }
+                            return (false);
                         })
+
+                        .sort((a, b) => a.priority - b.priority)
+                        
                         .map ( (item) => (
-                            <div onClick={() => {setSearchInput(item)}} className='dropdownSuggestions'>{item}</div>
+                            <div onClick={() => {setSearchInput(item.title)}} className='dropdownSuggestion'>{item.title + ' - ' + item.artist}</div>
                         ))
                 }
             </div>

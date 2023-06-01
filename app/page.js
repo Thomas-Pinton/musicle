@@ -18,6 +18,8 @@ let musica1 = 'https://file.notion.so/f/s/ceb26cb9-9dcd-4f09-b34d-337fdf833c00/C
 
 let wikipediaMusic = 'https://upload.wikimedia.org/wikipedia/pt/8/8e/I_want_you.ogg';
 
+const BASE_SIZE = 92;
+
 const getSong = async () => {
   return new Promise ( async (resolve) => {
     try {
@@ -79,8 +81,10 @@ export default function App ()
 
   const [dataFetched, setDataFetched] = useState(false);
   const [songsFetched, setSongsFetched] = useState(false);
+
   const [playing, setPlaying] = useState(false);
   const [timeBar, setTimeBar] = useState(0);
+  const [timeToPlay, setTimeToPlay] = useState(0.5);
 
   const [attempt, setAttempt] = useState(0);
 
@@ -101,13 +105,16 @@ export default function App ()
     })
   }, []);
 
+
   useEffect( () => {
-    if (timeBar < 70 && playing)
+    const tamMax = 184 * timeToPlay;
+
+    if ((timeBar < tamMax) && playing)
     {
-      setTimeout(() => setTimeBar(prev => prev += 1), 43);
+      setTimeout(() => setTimeBar(prev => prev += 2), 43);
       console.log("valor", timeBar)
     }
-    if (timeBar == 70)
+    if (timeBar == (tamMax))
     {
       setPlaying(false);
     }
@@ -128,18 +135,21 @@ export default function App ()
       return;
 
     console.log("Data song ida", song.id)
-    console.log("Data song id", data[song.id])
+    console.log("Data song id", data[song.id].title)
     console.log("Handling search")
 
     const updatedItems = [...texts];
 
-    if (data[song.id] != songAttempt)
+    console.log(data[song.id].title, songAttempt);
+
+    if (data[song.id].title != songAttempt)
       updatedItems[attempt] = "❌ " + songAttempt;
     else
       updatedItems[attempt] = "✅ " + songAttempt;
 
     setTexts(updatedItems);
     setAttempt(prev => prev += 1);
+    setTimeToPlay(prev => prev += prev);
   }
 
   return (
@@ -168,25 +178,28 @@ export default function App ()
             <Attempt text={texts[4]} />
           </div> 
 
-          <div className='time_wrapper'>
-            <Time w={70}/>
-            <Time w={140}/>
-            <Time w={280}/>
-            <Time w={560}/>
+          <div className='times_wrapper'>
+            <div className='time_wrapper'>
+              <Time w={BASE_SIZE}/>
+              <Time w={BASE_SIZE}/>
+              <Time w={BASE_SIZE*2}/>
+              <Time w={BASE_SIZE*4}/>
+            </div>
+            <div className='timeFill' style={{width: timeBar}}>
+            </div>
           </div>
-          <div className='timeFill' style={{width: timeBar}}>
 
+          {console.log("data (tem que vir depois)", data)}
+          <div className='searchBox'>
+            <SearchBox data={data} onClickSearch={handleSearch}>
+            </SearchBox>
           </div>
-
           <div className='play_wrapper'>
             {console.log("page.js", song.src, dataFetched)}
-            <Player url={song.src} onClickPlay={handleClick}>
+            <Player url={song.src} timeToPlay={timeToPlay} onClickPlay={handleClick}>
             </Player>
           </div>
-          {console.log("data (tem que vir depois)", data)}
-          <SearchBox data={data} onClickSearch={handleSearch}>
-
-          </SearchBox>
+          
         </>
       )}
     </div>

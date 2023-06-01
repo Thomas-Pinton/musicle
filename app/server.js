@@ -14,13 +14,42 @@ app.get('/', async (req, res) => {
 })
 
 app.get('/allSongs', async (req, res) => {
-  const songs = await getAllSongs();
+  const songs = await getSongsMetadata();
   res.send(songs);
 })
 
 app.listen(4000, () => {
   console.log('Server listening on port 4000')
 });
+
+const getSongMetadata = async (filePath1, file1) => {
+  const mm = await import("music-metadata");
+  return new Promise ( resolve => {
+    mm.parseFile(filePath1 + '/' + file1).then(metadata => {
+      resolve({
+        title: metadata.common.title, 
+        artist: metadata.common.artist, 
+        album: metadata.common.album
+      });
+    })
+  })
+}
+
+const getSongsMetadata = () => {
+  let filePath = 'C:/Users/thoma/SpotiFlyer/Playlists/All_Out_2010s'
+  return new Promise( async resolve => {
+    let metadata = []
+    let fsObj = fs.readdirSync(filePath);
+    for (const file of fsObj)
+    {
+      var data = await getSongMetadata(filePath, file);
+      console.log("name", data);
+      metadata.push(data)
+    }
+    console.log("Resolved");
+    resolve(metadata);
+  });
+}
 
 const getAllSongs = async () => {
 

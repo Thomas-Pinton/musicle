@@ -1,8 +1,9 @@
 "use client"
 
 import React, { useState, useEffect } from "react";
+import './player.css'
 
-const useAudio = url => {
+const useAudio = (url, timeToPlay) => {
   console.log("Url 2 ", url)
   const [audio, setAudio] = useState(new Audio(url));
   const [playing, setPlaying] = useState(false);
@@ -32,7 +33,7 @@ const useAudio = url => {
       if (playing) {
         setPlaying(false)
       }
-    }, 3000); // set the timeout to 5 seconds (5000 milliseconds)
+    }, timeToPlay * 1000); // set the timeout to 5 seconds (5000 milliseconds)
 
     return () => {
       clearTimeout(timer);
@@ -42,14 +43,14 @@ const useAudio = url => {
   return [playing, toggle];
 };
 
-const Player = ({ url, onClickPlay }) => {
+const Player = ({ url, timeToPlay, onClickPlay }) => {
 
   console.log("Url player", url)
-  const [playing, toggle] = useAudio(url);
+  const [playing, toggle] = useAudio(url, timeToPlay);
 
   return (
     <div>
-      <button onClick={() => {toggle(), onClickPlay()}}>{playing ? "Pause" : "Play"}</button>
+      <button className="playButton" onClick={() => {toggle(), onClickPlay()}}>{playing ? "Pause" : "Play"}</button>
     </div>
   );
 };

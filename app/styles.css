@@ -45,7 +45,7 @@ body {
 
     /* position: absolute; */
     width: 1224px;
-    height: 350px;
+    height: 330px;
     /* left: 278px; */
     /* top: 226px; */
 
@@ -74,20 +74,24 @@ body {
     /* left: 278px;
     top: 226px; */
 
-    border: 3px solid #FFFFFF;
+    border: 2px solid #FFFFFF;
 }
 
 .time {
-    border: 3px solid white;
+    border: 1px solid white;
     height: 54px;
 }
 
 .timeFill {
-    border: 2px solid red;
+    /* border: 2px solid red; */
     background-color: #FFFFFF;
-    height: 54px;
+    height: 52px;
     margin-top: -53px;
-    margin-left: 89px;
+    margin-left: 269px;
+}
+
+.times_wrapper {
+    margin-bottom: 20px;
 }
 
 .time_wrapper {
@@ -99,15 +103,28 @@ body {
     /* position: absolute;
     left: 108px;
     top: 728px; */
-    width: 1050px;
+    width: 690px;
     height: 54px;
 
     margin: 40px auto 0;
 
     /* margin-top: 40px; */
 
-    border: 2px solid red;
+    /* border: 2px solid red; */
 }
+
+.searchBox {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.play_wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+
 
 
 .triangle_play_button {

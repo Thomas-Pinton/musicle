@@ -5,24 +5,37 @@
 }
 
 .inputArea {
+    width: 100%;
     display: flex;
+    justify-content: space-between;
 }
 
 .searchInput {
-    width: 150px;
+    width: 70%;
     height: 50px;
     color: black;
     margin-right: 20px;
 }
 
 .searchButton {
-    width: 50px;
+    width: 100px;
     height: 50px;
-    background-color: green;
+    background-color: #4E6E5D;
+
 }
 
 .dropdownSuggestions { 
-    width: 500px;
-    border-width: 1px;
+    width: 70%;
+    /* border-bottom: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    border-color: gray; */
+}
+
+.dropdownSuggestion { 
+    width: 100%;
+    border-bottom: 1px solid gray;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
     border-color: gray;
 }
