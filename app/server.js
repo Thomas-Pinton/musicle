@@ -112,6 +112,8 @@ const getAllSongs = async () => {
 
 const getSong = async () => {
 
+  let date = new Date();
+
   function readFileAsync(filename) {
     return new Promise((resolve, reject) => {
       fs.readFile(filename, 'utf8', (err, data) => {
@@ -128,6 +130,7 @@ const getSong = async () => {
     console.log("No data saved");
   } else 
   {
+    if (data[0].date == date.getDate())
     console.log("Song already saved");
     return (data[0]);
   }

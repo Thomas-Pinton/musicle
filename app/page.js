@@ -74,6 +74,7 @@ export default function App ()
   const [song, setSong] = useState({
     id: 'Teste',
     src: wikipediaMusic,
+    answer: ''
   })
 
   const [data, setData] = useState([])
@@ -91,17 +92,24 @@ export default function App ()
   useEffect(() => {
     console.log(song.src)
     console.log("Using effect!")
-    getSong().then( (dataFromGetSong) => {
-      console.log("Data from get song", dataFromGetSong)
-      setSong({id: dataFromGetSong.id, src: dataFromGetSong.src})
-      setDataFetched(true);
-      // setAudio(dataFromGetSong.src)
-    })
+
     getSongs().then( (response) => {
       // const songs = response.map((song, index) => ({ key: index.toString(), value: song }));
       setData(response)
+
       console.log("Data (tem que vir antes)", data)
       setSongsFetched(true);
+
+      getSong().then( (dataFromGetSong) => {
+        console.log("Data from get song", dataFromGetSong)
+        setSong({
+          id: dataFromGetSong.id, 
+          src: dataFromGetSong.src,
+          answer: response[dataFromGetSong.id].title + ' - ' + response[dataFromGetSong.id].artist
+        })
+        setDataFetched(true);
+        // setAudio(dataFromGetSong.src)
+      })
     })
   }, []);
 
@@ -140,9 +148,9 @@ export default function App ()
 
     const updatedItems = [...texts];
 
-    console.log(data[song.id].title, songAttempt);
+    // console.log(data[song.id].title, songAttempt);
 
-    if (data[song.id].title != songAttempt)
+    if (song.answer != songAttempt)
       updatedItems[attempt] = "❌ " + songAttempt;
     else
       updatedItems[attempt] = "✅ " + songAttempt;
