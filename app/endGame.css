@@ -1,0 +1,13 @@
+.body {
+    width: 80%;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.songName {
+    font-size: 40px;
+}
+
+.endMessage {
+    font-size: 24px;
+}

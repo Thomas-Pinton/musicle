@@ -131,8 +131,10 @@ const getSong = async () => {
   } else 
   {
     if (data[0].date == date.getDate())
-    console.log("Song already saved");
-    return (data[0]);
+    {
+      console.log("Song already saved");
+      return (data[0]);
+    }
   }
 
   const browser = await puppeteer.launch();
@@ -153,6 +155,7 @@ const getSong = async () => {
   const song = {
     id: randomNumber,
     src: src,
+    date: date.getDate(),
   };
 
   console.log(song)

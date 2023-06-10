@@ -5,7 +5,7 @@ import { useState } from "react";
 const SearchBox = ({ data, onClickSearch }) => {
 
     const [searchInput, setSearchInput] = useState("");
-    const [positionSelected, setPositionSelected] = useState(-1);
+    const [positionSelected, setPositionSelected] = useState(0);
 
     const onChange = (event) => {
         setSearchInput(event.target.value);

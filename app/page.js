@@ -1,12 +1,15 @@
 "use client"
 
 import './styles.css';
+import './endGame.css';
 
 import Player from './player.js'
 import SearchBox from './searchBox.js'
+import Modal from './popUp.js'
+
 import axios from 'axios';
 
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 //import menu from './images/menu.png'
 import menu from 'C:/Users/thoma/OneDrive/Documentos/Codes/HeardleClone/heardle_clone/app/images/menu.png'
 import account from './images/account.png'
@@ -89,6 +92,10 @@ export default function App ()
 
   const [attempt, setAttempt] = useState(0);
 
+  const [hasPlayed, setHasPlayed] = useState(false);
+
+  const date = new Date().getDate();
+
   useEffect(() => {
     console.log(song.src)
     console.log("Using effect!")
@@ -113,13 +120,41 @@ export default function App ()
     })
   }, []);
 
+  //HasPlayed
+  useEffect(() => {
+    const hasPlayedData = window.localStorage.getItem(`HAS_PLAYED${date}`);
+    console.log("Data", hasPlayedData); 
+    if (hasPlayedData && JSON.parse(hasPlayedData) == true)
+      setHasPlayed(true);
+
+    // removing all keys with HAS_PLAYED value
+    var arr = [];
+    for (var i = 0; i < localStorage.length; i++){
+      if (localStorage.key(i).startsWith('HAS_PLAYED')) {
+          arr.push(localStorage.key(i));
+      }
+    }
+    // Iterate over arr and remove the items by key
+    for (var i = 0; i < arr.length; i++) {
+        localStorage.removeItem(arr[i]);
+    }
+  },[])
+
+  useEffect(() => {
+    console.log("Has Played", hasPlayed);
+    window.localStorage.setItem(`HAS_PLAYED${date}`, JSON.stringify(hasPlayed));
+    console.log("1", window.localStorage.getItem(`HAS_PLAYED${date}`))
+  }, [hasPlayed]);
+
 
   useEffect( () => {
     const tamMax = 184 * timeToPlay;
 
+    console.log(timeBar)
+
     if ((timeBar < tamMax) && playing)
     {
-      setTimeout(() => setTimeBar(prev => prev += 2), 43);
+      setTimeout(() => setTimeBar(prev => prev += 2), 11);
       console.log("valor", timeBar)
     }
     if (timeBar == (tamMax))
@@ -153,7 +188,10 @@ export default function App ()
     if (song.answer != songAttempt)
       updatedItems[attempt] = "❌ " + songAttempt;
     else
+    {
       updatedItems[attempt] = "✅ " + songAttempt;
+      setHasPlayed(true);
+    }
 
     setTexts(updatedItems);
     setAttempt(prev => prev += 1);
@@ -161,23 +199,24 @@ export default function App ()
   }
 
   return (
-    <div>
-      {dataFetched && songsFetched && (
+    <div style={{width: '100%'}}>
+      <div className='top'>
+        <img
+          src={menuUrl}
+          alt={'Dropdown menu'}
+          className='menu'
+          />
+        <h1 className="heardle">Heardle Clone</h1>
+        <img
+          src={accountUrl}
+          alt={'Account'}
+          className='account'
+          />
+      </div>
+
+      {/* if you've not played today */}
+      {!hasPlayed && dataFetched && songsFetched && (
         <>
-          <div className='top'>
-            <img
-              src={menuUrl}
-              alt={'Dropdown menu'}
-              className='menu'
-            />
-            <h1 className="heardle">Heardle Clone</h1>
-            <img
-              src={accountUrl}
-              alt={'Account'}
-              className='account'
-            />
-          </div>
-          
           <div className='attempt_wrapper'>
             <Attempt text={texts[0]} />
             <Attempt text={texts[1]} />
@@ -207,9 +246,18 @@ export default function App ()
             <Player url={song.src} timeToPlay={timeToPlay} onClickPlay={handleClick}>
             </Player>
           </div>
-          
-        </>
+        </>          
+      )}
+
+      {/* if you already played / endgame screen */}
+      { hasPlayed && dataFetched && (
+        <div className='body'>
+          <h1 className='songName'>{song.answer}</h1>
+          <h2 className='endMessage'>Congrats, you've won!
+          Come back tomorrow to play a new game.</h2>
+        </div>
       )}
     </div>
+    
   );
 }
