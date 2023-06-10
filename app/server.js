@@ -26,7 +26,9 @@ app.listen(4000, () => {
 });
 
 const getSongMetadata = async (filePath1, file1) => {
+
   const mm = await import("music-metadata");
+  
   return new Promise ( resolve => {
     mm.parseFile(filePath1 + '/' + file1).then(metadata => {
       // console.log(metadata.common.picture);
@@ -42,7 +44,9 @@ const getSongMetadata = async (filePath1, file1) => {
 }
 
 const getSongsMetadata = () => {
+
   let filePath = 'C:/Users/thoma/SpotiFlyer/Playlists/All_Out_2010s'
+
   return new Promise( async resolve => {
     let metadata = []
     let fsObj = fs.readdirSync(filePath);
@@ -75,46 +79,6 @@ const getAllSongs = async () => {
 
   })
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  await page.goto('https://congruous-year-ded.notion.site/M-sica-237c41fcad0f425a9591407e492efd0f');
-
-  await page.waitForSelector('audio');
-
-  const audios = await page.$$('audio');
-
-  console.log(audios.length);
-  
-  let songs = [];
-
-  for (i in audios)
-  {
-    const src = await audios[i].evaluate(node => node.src);
-    songs[i] = {
-      name: names[i],
-      src: src,
-    }
-  }
-
-  console.log(songs)
-
-  const jsonData = JSON.stringify(songs, null, 2);
-  const jsonNames = JSON.stringify(names, null, 2);
-
-  fs.writeFile('song.json', jsonData, (err) => {
-    if (err) throw err;
-    console.log('Data written to file');
-  });
-
-  fs.writeFile('names.json', jsonNames, (err) => {
-    if (err) throw err;
-    console.log('Data written to file');
-  });
-
-  await browser.close();
-
-  return songs;
 }
 
 const getSong = async () => {
@@ -169,34 +133,6 @@ const getSong = async () => {
 
   return song;
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  await page.goto('https://congruous-year-ded.notion.site/M-sica-237c41fcad0f425a9591407e492efd0f');
-
-  await page.waitForSelector('audio');
-
-  const audios = await page.$$('audio');
-
-  console.log(audios.length);
-
-  // const randomNumber = Math.floor(Math.random() * (audios.length));
-
-  const src = await audios[randomNumber].evaluate(node => node.src);
-
-  // const song = {
-  //   id: randomNumber,
-  //   src: src,
-  //   date: date.getDate(),
-  // };
-
-  console.log(song)
-
-  
-
-  await browser.close();
-
-  return song;
 }
 
 

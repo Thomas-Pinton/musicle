@@ -92,7 +92,12 @@ export default function App ()
 
   const [attempt, setAttempt] = useState(0);
 
-  const [hasPlayed, setHasPlayed] = useState(false);
+  const GameState = {
+    lost: 0,
+    won: 1,
+    notPlayed: 2,
+  }
+  const [gameState, setGameState] = useState(GameState.notPlayed);
 
   const date = new Date().getDate();
 
@@ -123,15 +128,15 @@ export default function App ()
 
   //HasPlayed
   useEffect(() => {
-    const hasPlayedData = window.localStorage.getItem(`HAS_PLAYED${date}`);
-    console.log("Data", hasPlayedData); 
-    if (hasPlayedData && JSON.parse(hasPlayedData) == true)
-      setHasPlayed(true);
+    const gameStateData = window.localStorage.getItem(`GAME_STATE${date}`);
+    console.log("Data", gameStateData); 
+    if (gameStateData)
+      setGameState(JSON.parse(gameStateData));
 
-    // removing all keys with HAS_PLAYED value
+    // removing all keys with GAME_STATE value
     var arr = [];
     for (var i = 0; i < localStorage.length; i++){
-      if (localStorage.key(i).startsWith('HAS_PLAYED')) {
+      if (localStorage.key(i).startsWith('GAME_STATE')) {
           arr.push(localStorage.key(i));
       }
     }
@@ -142,10 +147,10 @@ export default function App ()
   },[])
 
   useEffect(() => {
-    console.log("Has Played", hasPlayed);
-    window.localStorage.setItem(`HAS_PLAYED${date}`, JSON.stringify(hasPlayed));
-    console.log("1", window.localStorage.getItem(`HAS_PLAYED${date}`))
-  }, [hasPlayed]);
+    console.log("Game status ", gameState);
+    window.localStorage.setItem(`GAME_STATE${date}`, JSON.stringify(gameState));
+    console.log("1", window.localStorage.getItem(`GAME_STATE${date}`))
+  }, [gameState]);
 
 
   useEffect( () => {
@@ -175,8 +180,8 @@ export default function App ()
   const [texts, setTexts] = useState([]);
 
   function handleSearch(songAttempt) {
-    if (attempt > 4)
-      return;
+    if (attempt > 3)
+      setGameState(GameState.lost);
 
     console.log("Data song ida", song.id)
     console.log("Data song id", data[song.id].title)
@@ -191,7 +196,7 @@ export default function App ()
     else
     {
       updatedItems[attempt] = "✅ " + songAttempt;
-      setHasPlayed(true);
+      setGameState(GameState.won);
     }
 
     setTexts(updatedItems);
@@ -216,7 +221,7 @@ export default function App ()
       </div>
 
       {/* if you've not played today */}
-      {!hasPlayed && dataFetched && songsFetched && (
+      {gameState == GameState.notPlayed && dataFetched && songsFetched && (
         <>
           <div className='attempt_wrapper'>
             <Attempt text={texts[0]} />
@@ -251,12 +256,23 @@ export default function App ()
       )}
 
       {/* if you already played / endgame screen */}
-      { hasPlayed && dataFetched && (
+      { (gameState == GameState.lost || gameState == GameState.won) && dataFetched && (
         <div className='body'>
           <h1 className='songName'>{song.answer}</h1>
           {/* <img src={song.cover}/> */}
-          <h2 className='endMessage'>Congrats, you've won!
-          Come back tomorrow to play a new game.</h2>
+          {
+            gameState == GameState.won && (
+              <h2 className='endMessage'>Congrats, you've won!
+              Come back tomorrow to play a new game.</h2>
+            )
+          }
+          {
+            gameState == GameState.lost && (
+              <h2 className='endMessage'> You lost!
+              Come back tomorrow to play a new game.</h2>
+            )
+          }
+          
         </div>
       )}
     </div>
