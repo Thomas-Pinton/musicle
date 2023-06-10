@@ -52,6 +52,19 @@ const getSongs = async () => {
   })
 }
 
+const removeAllItensWithPrefix = (prefix) => {
+  var arr = [];
+  for (var i = 0; i < localStorage.length; i++){
+    if (localStorage.key(i).startsWith(prefix)) {
+        arr.push(localStorage.key(i));
+    }
+  }
+  // Iterate over arr and remove the items by key
+  for (var i = 0; i < arr.length; i++) {
+      localStorage.removeItem(arr[i]);
+  }
+}
+
 function Attempt ({ text })
 {
   const changeText = (newText) => {
@@ -126,7 +139,7 @@ export default function App ()
     })
   }, []);
 
-  //HasPlayed
+  //gameState
   useEffect(() => {
     const gameStateData = window.localStorage.getItem(`GAME_STATE${date}`);
     console.log("Data", gameStateData); 
@@ -134,16 +147,7 @@ export default function App ()
       setGameState(JSON.parse(gameStateData));
 
     // removing all keys with GAME_STATE value
-    var arr = [];
-    for (var i = 0; i < localStorage.length; i++){
-      if (localStorage.key(i).startsWith('GAME_STATE')) {
-          arr.push(localStorage.key(i));
-      }
-    }
-    // Iterate over arr and remove the items by key
-    for (var i = 0; i < arr.length; i++) {
-        localStorage.removeItem(arr[i]);
-    }
+    removeAllItensWithPrefix('GAME_STATE');
   },[])
 
   useEffect(() => {
@@ -178,6 +182,17 @@ export default function App ()
   }
 
   const [texts, setTexts] = useState([]);
+
+  useEffect ( () => {
+    var textsData = window.localStorage.getItem(`TEXTS${date}`);
+    if (textsData)
+      setTexts(JSON.parse(textsData));
+    removeAllItensWithPrefix('TEXTS');
+  }, [])
+
+  useEffect ( () => {
+    window.localStorage.setItem(`TEXTS${date}`, JSON.stringify(texts));
+  }, [texts])
 
   function handleSearch(songAttempt) {
     if (attempt > 3)
