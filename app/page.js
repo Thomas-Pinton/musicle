@@ -108,10 +108,11 @@ export default function App ()
       setSongsFetched(true);
 
       getSong().then( (dataFromGetSong) => {
-        console.log("Data from get song", dataFromGetSong)
+        console.log("Data from get song", dataFromGetSong);
         setSong({
           id: dataFromGetSong.id, 
           src: dataFromGetSong.src,
+          cover: dataFromGetSong.cover,
           answer: response[dataFromGetSong.id].title + ' - ' + response[dataFromGetSong.id].artist
         })
         setDataFetched(true);
@@ -243,7 +244,7 @@ export default function App ()
           </div>
           <div className='play_wrapper'>
             {console.log("page.js", song.src, dataFetched)}
-            <Player url={song.src} timeToPlay={timeToPlay} onClickPlay={handleClick}>
+            <Player url={'http://localhost:4000/urls/' + song.src} timeToPlay={timeToPlay} onClickPlay={handleClick}>
             </Player>
           </div>
         </>          
@@ -253,6 +254,7 @@ export default function App ()
       { hasPlayed && dataFetched && (
         <div className='body'>
           <h1 className='songName'>{song.answer}</h1>
+          {/* <img src={song.cover}/> */}
           <h2 className='endMessage'>Congrats, you've won!
           Come back tomorrow to play a new game.</h2>
         </div>

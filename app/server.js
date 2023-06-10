@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
+const { resolve } = require('path');
 // const mm = require('music-metadata');
 
 const app = express();
@@ -18,6 +19,8 @@ app.get('/allSongs', async (req, res) => {
   res.send(songs);
 })
 
+app.use('/urls', express.static('C:/Users/thoma/SpotiFlyer/Playlists/All_Out_2010s'));
+
 app.listen(4000, () => {
   console.log('Server listening on port 4000')
 });
@@ -26,10 +29,13 @@ const getSongMetadata = async (filePath1, file1) => {
   const mm = await import("music-metadata");
   return new Promise ( resolve => {
     mm.parseFile(filePath1 + '/' + file1).then(metadata => {
+      // console.log(metadata.common.picture);
       resolve({
         title: metadata.common.title, 
         artist: metadata.common.artist, 
         album: metadata.common.album
+        // cover: mm.selectCover(metadata.common.picture)
+        // cover: (metadata.common.picture ? metadata.common.picture[0].data.toString('base64') : null)
       });
     })
   })
@@ -53,20 +59,21 @@ const getSongsMetadata = () => {
 
 const getAllSongs = async () => {
 
-  let filePath = 'C:/Users/thoma/SpotiFlyer/Playlists/All_Out_2010s'
+  return new Promise( (resolve) => {
 
-  let names = []
+    let filePath = 'C:/Users/thoma/SpotiFlyer/Playlists/All_Out_2010s'
 
-  fs.readdirSync(filePath).forEach(file => {
-    names.push(file)
-  //  mm.parseFile(file).then(metadata => {
-  //     names.push(`${metadata.common.title} - ${metad.common.artist}`);
-  //   }).catch(err => {
-  //     console.error(err.message);
-  //   });
-  });
+    let names = []
 
-  return names;
+    fs.readdirSync(filePath).forEach(file => {
+      names.push(file)
+    });
+
+    console.log(names.length)
+
+    resolve (names);
+
+  })
 
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -137,6 +144,31 @@ const getSong = async () => {
     }
   }
 
+  let names = await getAllSongs();
+
+  console.log("length", names.length)
+
+  const randomNumber = Math.floor(Math.random() * (names.length));
+
+  console.log(names, randomNumber)
+
+  const song = {
+    id: randomNumber,
+    src: names[randomNumber],
+    date: date.getDate(),
+  };
+
+  console.log("song", song)
+
+  const jsonData = JSON.stringify([song], null, 2);
+
+  fs.writeFile('song.json', jsonData, (err) => {
+    if (err) throw err;
+    console.log('Data written to file');
+  });
+
+  return song;
+
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
@@ -148,26 +180,23 @@ const getSong = async () => {
 
   console.log(audios.length);
 
-  const randomNumber = Math.floor(Math.random() * (audios.length));
+  // const randomNumber = Math.floor(Math.random() * (audios.length));
 
   const src = await audios[randomNumber].evaluate(node => node.src);
 
-  const song = {
-    id: randomNumber,
-    src: src,
-    date: date.getDate(),
-  };
+  // const song = {
+  //   id: randomNumber,
+  //   src: src,
+  //   date: date.getDate(),
+  // };
 
   console.log(song)
 
-  const jsonData = JSON.stringify([song], null, 2);
-
-  fs.writeFile('song.json', jsonData, (err) => {
-    if (err) throw err;
-    console.log('Data written to file');
-  });
+  
 
   await browser.close();
 
   return song;
 }
+
+
