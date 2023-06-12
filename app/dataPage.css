@@ -1,0 +1,71 @@
+.popUpBox {
+    width: 80%;
+    height: 900px;
+    /* margin: auto; */
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* border: 2px solid red; */
+}
+
+.title {
+    font-weight: bold;
+    font-size: 30px;
+    width: 100%;
+    /* border: 2px solid red; */
+}
+
+.attemptsDataWrapper {
+    width: 100%;
+    align-items: center;
+}
+
+.attemptData {
+    height: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.number {
+    width: 5%;
+}
+
+.barWrapper {
+    width: 95%;
+    display: flex;
+    flex-direction: row;
+    /* border: 2px solid blue; */
+}
+
+.barAttempt {
+    height: 100%;
+    /* width: 20%; */
+    background-color: #4E6E5D;
+}
+
+.winWrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.winOrLoss {
+    width: 20%;
+    text-align: center;
+    /* border: 2px solid red; */
+}
+
+.barGraph {
+    width: 80%;
+    display: flex;
+    /* border: 2px solid blue; */
+}
+
+.wonBar {
+    /* width: 80%;
+    height: 100%; */
+    background-color: green;
+}

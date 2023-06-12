@@ -9,12 +9,9 @@ const SearchBox = ({ data, onClickSearch }) => {
 
     const onChange = (event) => {
         setSearchInput(event.target.value);
-        console.log(event.target.value)
-        console.log(searchInput);
     }
 
     const handleKeyDown = (event) => {
-        console.log("Key", event.key)
         
             // When changing the input text, it might be that
             // the position selected is higher than the number of itens
@@ -36,7 +33,6 @@ const SearchBox = ({ data, onClickSearch }) => {
             if (positionSelected + 1 < itensSelected.length)
             {
                 setPositionSelected(prev => prev + 1)   
-                // console.log("Position", positionSelected)             
             }
         }
         else if (event.key === 'ArrowUp')
@@ -44,7 +40,6 @@ const SearchBox = ({ data, onClickSearch }) => {
             if (positionSelected > 0)
             {
                 setPositionSelected(prev => prev - 1)
-                // console.log("Position", positionSelected)
             }
         }
     }

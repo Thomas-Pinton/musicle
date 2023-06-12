@@ -6,6 +6,7 @@ import './endGame.css';
 import Player from './player.js'
 import SearchBox from './searchBox.js'
 import Modal from './popUp.js'
+import DataPage from './dataPage.js';
 
 import axios from 'axios';
 
@@ -145,15 +146,30 @@ export default function App ()
     console.log("Data", gameStateData); 
     if (gameStateData)
       setGameState(JSON.parse(gameStateData));
-
     // removing all keys with GAME_STATE value
     removeAllItensWithPrefix('GAME_STATE');
   },[])
 
   useEffect(() => {
-    console.log("Game status ", gameState);
+    let previousGamesData = window.localStorage.getItem("PREVIOUS_GAMES_DATA");
+    previousGamesData = previousGamesData ? JSON.parse(previousGamesData) : {attempts: [0, 0, 0, 0, 0], won: 0, lost: 0};
+    
+    console.log("Going to decide")
+    
+    if (gameState == GameState.lost)
+    {
+      previousGamesData.attempts[attempt]++;
+      previousGamesData.won++;
+    }
+    else if (gameState == GameState.won)
+    {
+      previousGamesData.lost++;
+    }
+    
+    console.log("previousGamesData", previousGamesData);
+    
     window.localStorage.setItem(`GAME_STATE${date}`, JSON.stringify(gameState));
-    console.log("1", window.localStorage.getItem(`GAME_STATE${date}`))
+    window.localStorage.setItem("PREVIOUS_GAMES_DATA", JSON.stringify(previousGamesData));
   }, [gameState]);
 
 
@@ -186,7 +202,11 @@ export default function App ()
   useEffect ( () => {
     var textsData = window.localStorage.getItem(`TEXTS${date}`);
     if (textsData)
-      setTexts(JSON.parse(textsData));
+    {
+      const textToJson = JSON.parse(textsData);
+      setTexts(textToJson);
+      setAttempt(textToJson.length);
+    }
     removeAllItensWithPrefix('TEXTS');
   }, [])
 
@@ -218,6 +238,10 @@ export default function App ()
     setAttempt(prev => prev += 1);
     setTimeToPlay(prev => prev += prev);
   }
+
+  return (
+    <DataPage></DataPage>
+  )
 
   return (
     <div style={{width: '100%'}}>
