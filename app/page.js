@@ -239,12 +239,15 @@ export default function App ()
     setTimeToPlay(prev => prev += prev);
   }
 
-  return (
-    <DataPage></DataPage>
-  )
+  // return (
+  //   <DataPage></DataPage>
+  // )
 
   return (
     <div style={{width: '100%'}}>
+    <DataPage>
+    </DataPage>
+    <div style={{width: '100%', zIndex: '0', position: 'absolute'}}>
       <div className='top'>
         <img
           src={menuUrl}
@@ -315,6 +318,6 @@ export default function App ()
         </div>
       )}
     </div>
-    
+    </div>
   );
 }
