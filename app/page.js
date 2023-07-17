@@ -12,8 +12,6 @@ import axios from 'axios';
 
 import React, {useEffect, useState} from 'react';
 //import menu from './images/menu.png'
-import menu from 'C:/Users/thoma/OneDrive/Documentos/Codes/HeardleClone/heardle_clone/app/images/menu.png'
-import account from './images/account.png'
 
 let menuUrl = 'https://cdn-icons-png.flaticon.com/512/7216/7216128.png';
 let accountUrl = 'https://cdn-icons-png.flaticon.com/512/61/61205.png';
@@ -53,19 +51,6 @@ const getSongs = async () => {
   })
 }
 
-const removeAllItensWithPrefix = (prefix) => {
-  var arr = [];
-  for (var i = 0; i < localStorage.length; i++){
-    if (localStorage.key(i).startsWith(prefix)) {
-        arr.push(localStorage.key(i));
-    }
-  }
-  // Iterate over arr and remove the items by key
-  for (var i = 0; i < arr.length; i++) {
-      localStorage.removeItem(arr[i]);
-  }
-}
-
 function Attempt ({ text })
 {
   const changeText = (newText) => {
@@ -95,7 +80,6 @@ export default function App ()
   })
 
   const [data, setData] = useState([])
-  // let data = []
 
   const [dataFetched, setDataFetched] = useState(false);
   const [songsFetched, setSongsFetched] = useState(false);
@@ -106,6 +90,9 @@ export default function App ()
 
   const [attempt, setAttempt] = useState(0);
 
+  const [popUpClosed, setPopUpClosed] = useState(true);
+
+
   const GameState = {
     lost: 0,
     won: 1,
@@ -113,14 +100,14 @@ export default function App ()
   }
   const [gameState, setGameState] = useState(GameState.notPlayed);
 
-  const date = new Date().getDate();
+  let date = new Date();
+  date = date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
 
   useEffect(() => {
     console.log(song.src)
     console.log("Using effect!")
 
     getSongs().then( (response) => {
-      // const songs = response.map((song, index) => ({ key: index.toString(), value: song }));
       setData(response)
 
       console.log("Data (tem que vir antes)", data)
@@ -135,40 +122,58 @@ export default function App ()
           answer: response[dataFromGetSong.id].title + ' - ' + response[dataFromGetSong.id].artist
         })
         setDataFetched(true);
-        // setAudio(dataFromGetSong.src)
       })
     })
   }, []);
 
   //gameState
   useEffect(() => {
-    const gameStateData = window.localStorage.getItem(`GAME_STATE${date}`);
+    const previousDate = window.localStorage.getItem('DATE');
+    if (!previousDate || previousDate != date)
+    {
+      //if the previous game was played yesterday, update the variables needed
+      window.localStorage.setItem('GAME_STATE', GameState.notPlayed);
+      window.localStorage.setItem('TEXTS', '[]');
+    }
+
+    const gameStateData = window.localStorage.getItem(`GAME_STATE`);
     console.log("Data", gameStateData); 
     if (gameStateData)
       setGameState(JSON.parse(gameStateData));
     // removing all keys with GAME_STATE value
-    removeAllItensWithPrefix('GAME_STATE');
   },[])
 
   useEffect(() => {
+
+    const previousDate = window.localStorage.getItem('DATE');
+
+    if ((previousDate && previousDate == date) || gameState == GameState.notPlayed) 
+    {
+      console.log("Previousdate already exists");
+      return;
+    }
+      // not updating because previousGamesData has already been updated
+
+    window.localStorage.setItem('DATE', date);
+
     let previousGamesData = window.localStorage.getItem("PREVIOUS_GAMES_DATA");
     previousGamesData = previousGamesData ? JSON.parse(previousGamesData) : {attempts: [0, 0, 0, 0, 0], won: 0, lost: 0};
-    
+
     console.log("Going to decide")
     
-    if (gameState == GameState.lost)
+    if (gameState == GameState.won)
     {
-      previousGamesData.attempts[attempt]++;
+      previousGamesData.attempts[attempt-1]++;
       previousGamesData.won++;
     }
-    else if (gameState == GameState.won)
+    else if (gameState == GameState.lost)
     {
       previousGamesData.lost++;
     }
     
     console.log("previousGamesData", previousGamesData);
     
-    window.localStorage.setItem(`GAME_STATE${date}`, JSON.stringify(gameState));
+    window.localStorage.setItem(`GAME_STATE`, JSON.stringify(gameState));
     window.localStorage.setItem("PREVIOUS_GAMES_DATA", JSON.stringify(previousGamesData));
   }, [gameState]);
 
@@ -200,18 +205,17 @@ export default function App ()
   const [texts, setTexts] = useState([]);
 
   useEffect ( () => {
-    var textsData = window.localStorage.getItem(`TEXTS${date}`);
+    var textsData = window.localStorage.getItem(`TEXTS`);
     if (textsData)
     {
       const textToJson = JSON.parse(textsData);
       setTexts(textToJson);
       setAttempt(textToJson.length);
     }
-    removeAllItensWithPrefix('TEXTS');
   }, [])
 
   useEffect ( () => {
-    window.localStorage.setItem(`TEXTS${date}`, JSON.stringify(texts));
+    window.localStorage.setItem(`TEXTS`, JSON.stringify(texts));
   }, [texts])
 
   function handleSearch(songAttempt) {
@@ -239,21 +243,18 @@ export default function App ()
     setTimeToPlay(prev => prev += prev);
   }
 
-  // return (
-  //   <DataPage></DataPage>
-  // )
-
   return (
     <div style={{width: '100%'}}>
-    <DataPage>
-    </DataPage>
+    {!popUpClosed && (<DataPage setPopUpClosed={setPopUpClosed}/>)}
     <div style={{width: '100%', zIndex: '0', position: 'absolute'}}>
       <div className='top'>
-        <img
-          src={menuUrl}
-          alt={'Dropdown menu'}
-          className='menu'
+        <button onClick={() => setPopUpClosed(false)}>
+          <img
+            src={menuUrl}
+            alt={'Dropdown menu'}
+            className='menu'
           />
+        </button>
         <h1 className="heardle">Heardle Clone</h1>
         <img
           src={accountUrl}

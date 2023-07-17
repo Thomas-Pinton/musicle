@@ -3,6 +3,8 @@
 import React, { useState, useEffect } from "react";
 import './player.css'
 
+let buttonUrl = 'https://cdn2.iconfinder.com/data/icons/button-v1/30/15-256.png'
+
 const useAudio = (url, timeToPlay) => {
   console.log("Url 2 ", url)
   const [audio, setAudio] = useState(new Audio(url));
@@ -49,8 +51,10 @@ const Player = ({ url, timeToPlay, onClickPlay }) => {
   const [playing, toggle] = useAudio(url, timeToPlay);
 
   return (
-    <div>
-      <button className="playButton" onClick={() => {toggle(), onClickPlay()}}>{playing ? "Pause" : "Play"}</button>
+    <div>,
+      <button className="playButton" onClick={() => {toggle(), onClickPlay()}}>{playing ? "Pause" : "Play"}
+        {/* <img src={buttonUrl}/> */}
+      </button>
     </div>
   );
 };

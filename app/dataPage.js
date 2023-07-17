@@ -15,18 +15,19 @@ const AttemptValue = ({numberOfAttempts, amount, percentage}) => {
     )
 }
 
-const DataPage = () => {
+const DataPage = ({ setPopUpClosed }) => {
 
     const [previousGamesData, setPreviousGamesData] = useState({attempts: [0, 0, 0, 0, 0], won: 0, lost: 0})
     const [biggestAttempt, setBiggestAttempt] = useState(1);
-    const [popUpClosed, setPopUpClosed] = useState(false)
 
     useEffect( () => {
         let data = window.localStorage.getItem("PREVIOUS_GAMES_DATA");
-        data = null
         setPreviousGamesData(data ? JSON.parse(data) : {attempts: [2, 4, 7, 5, 4], won: 5, lost: 2});
-        if (data)
-            setBiggestAttempt(Math.max(...data.amount))
+        if (previousGamesData)
+        {
+            console.log(data);
+            setBiggestAttempt(Math.max(...(previousGamesData.attempts)))
+        }
         console.log('biggestattempt', biggestAttempt);
         console.log("teste", previousGamesData)
     }, [])
@@ -36,9 +37,6 @@ const DataPage = () => {
     }, [previousGamesData])
 
     return (
-        <div>
-        {console.log('popUpClosed', popUpClosed)}
-        {!popUpClosed && (
         <div className = 'background'>
             <div className="popUpBox">
                 <button onClick={() => setPopUpClosed(true)}>
@@ -98,8 +96,6 @@ const DataPage = () => {
                     <div className="winOrLoss">{previousGamesData.lost} <br/> Losses</div>
                 </div>
             </div>
-        </div>
-        )}
         </div>
     )
 }

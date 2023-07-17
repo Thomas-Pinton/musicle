@@ -41,7 +41,7 @@
 }
 
 .attemptData {
-    height: 30px;
+    height: 40px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -50,6 +50,7 @@
 
 .number {
     width: 5%;
+    margin: auto;
 }
 
 .barWrapper {

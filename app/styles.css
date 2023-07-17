@@ -66,7 +66,7 @@ body {
 
 
     /* position: absolute; */
-    width: 800px;
+    width: 60%;
     height: 45px;
 
     margin: 10px 0px;
@@ -82,15 +82,11 @@ body {
     height: 54px;
 }
 
-.timeFill {
-    background-color: #FFFFFF;
-    height: 53px;
-    margin-top: -53px;
-    margin-left: 245px;
-}
-
 .times_wrapper {
+    width: 736px;
+    margin: auto;
     margin-bottom: 20px;
+    /* border: 2px solid red; */
 }
 
 .time_wrapper {
@@ -102,16 +98,21 @@ body {
     /* position: absolute;
     left: 108px;
     top: 728px; */
-    width: 800px;
+    width: 100%;
     height: 54px;
-
-    margin: 40px auto 0;
-
-    /* margin-top: 40px; */
+    
+    margin: auto;
+    margin-top: 40px;
 
     /* border: 2px solid red; */
 }
 
+.timeFill {
+    background-color: #FFFFFF;
+    height: 53px;
+    margin-top: -53px;
+    /* margin-left: 245px; */
+}
 .searchBox {
     margin-bottom: 10px;
     display: flex;

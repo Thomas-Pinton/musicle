@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./PopUp.css";
+import "./popUp.css";
 
 export default function Modal() {
   const [modal, setModal] = useState(false);
