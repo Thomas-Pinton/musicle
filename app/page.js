@@ -295,7 +295,7 @@ export default function App ()
           </div>
           <div className='play_wrapper'>
             {console.log("page.js", song.src, dataFetched)}
-            <Player url={'http://localhost:4000/urls/' + song.src} timeToPlay={timeToPlay} onClickPlay={handleClick}>
+            <Player url={fetchUrl + 'urls/' + song.src} timeToPlay={timeToPlay} onClickPlay={handleClick}>
             </Player>
           </div>
         </>          
