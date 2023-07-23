@@ -12,8 +12,8 @@ import axios from 'axios';
 
 import React, {useEffect, useState} from 'react';
 //import menu from './images/menu.png'
-import menu from 'C:/Users/thoma/OneDrive/Documentos/Codes/HeardleClone/heardle_clone/app/images/menu.png'
-import account from './images/account.png'
+// import menu from 'C:/Users/thoma/OneDrive/Documentos/Codes/HeardleClone/heardle_clone/app/images/menu.png'
+// import account from './images/account.png'
 
 let menuUrl = 'https://cdn-icons-png.flaticon.com/512/7216/7216128.png';
 let accountUrl = 'https://cdn-icons-png.flaticon.com/512/61/61205.png';
