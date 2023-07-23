@@ -12,6 +12,8 @@ import axios from 'axios';
 
 import React, {useEffect, useState} from 'react';
 //import menu from './images/menu.png'
+import menu from 'C:/Users/thoma/OneDrive/Documentos/Codes/HeardleClone/heardle_clone/app/images/menu.png'
+import account from './images/account.png'
 
 let menuUrl = 'https://cdn-icons-png.flaticon.com/512/7216/7216128.png';
 let accountUrl = 'https://cdn-icons-png.flaticon.com/512/61/61205.png';
@@ -22,10 +24,12 @@ let wikipediaMusic = 'https://upload.wikimedia.org/wikipedia/pt/8/8e/I_want_you.
 
 const BASE_SIZE = 92;
 
+const fetchUrl = 'https://musicle-server.onrender.com/'
+
 const getSong = async () => {
   return new Promise ( async (resolve) => {
     try {
-      const response = await axios.get('http://localhost:4000/')
+      const response = await axios.get(fetchUrl)
       console.log(response.data)
       resolve (response.data);
       return;
@@ -39,7 +43,7 @@ const getSong = async () => {
 const getSongs = async () => {
   return new Promise ( async (resolve) => {
     try {
-      const response = await axios.get('http://localhost:4000/allSongs');
+      const response = await axios.get(fetchUrl + 'allSongs');
       console.log(response.data[0]);
       console.log(response.data[3]);
       resolve (response.data);
@@ -140,7 +144,6 @@ export default function App ()
     console.log("Data", gameStateData); 
     if (gameStateData)
       setGameState(JSON.parse(gameStateData));
-    // removing all keys with GAME_STATE value
   },[])
 
   useEffect(() => {
